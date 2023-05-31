@@ -8,6 +8,7 @@ import (
 	"github.com/lishimeng/tree/internal/conf"
 	"github.com/lishimeng/tree/internal/model"
 	"github.com/lishimeng/tree/internal/tool"
+	"github.com/pkg/errors"
 )
 
 // up_stream
@@ -16,49 +17,65 @@ func internal() {
 	qos := byte(conf.Config.Mqtt.Qos)
 	subscriber := model.SouthboundUpTopic
 	log.Info("subscriber:%s[%b]", subscriber, qos)
-	_ = app.GetMqtt().Subscribe(func(topic string, payload []byte) {
-		var err error
-		if len(payload) <= 0 {
-			return
-		}
-		var msg model.UpStream
+	_ = app.GetMqtt().Subscribe(onSouthboundUp, qos, subscriber)
+}
 
-		m, err := tool.TopicResolver(model.SouthboundUpTpl, topic)
-		if err != nil {
-			log.Info(err)
-			return
+func onSouthboundUp(topic string, payload []byte) {
+	defer func() {
+		if e := recover(); e != nil {
+			log.Debug(e)
 		}
-		var device = m[model.TopicKeyDevice]
+	}()
+	var err error
+	qos := byte(conf.Config.Mqtt.Qos)
+	if len(payload) <= 0 {
+		return
+	}
+	var msg model.UpStream
 
-		err = json.Unmarshal(payload, &msg)
-		if err != nil {
-			log.Info(err)
-			return
-		}
-		log.Info(msg)
-		if msg.Data == nil {
-			msg.Data = make(map[string]any)
-		}
-		err = updateRouter(device, msg.Gateway, msg.Channel)
-		if err != nil {
-			log.Info(err)
-			return
-		}
-		var northUp = model.NorthboundDownStream{
-			Device: msg.Device,
-			Data:   msg.Data,
-		}
-		topicExternal := fmt.Sprintf(model.NorthboundUpFormat, msg.Device)
-		var data []byte
-		data, err = json.Marshal(northUp)
-		if err != nil {
-			log.Info(err)
-			return
-		}
-		err = app.GetMqtt().Publish(topicExternal, qos, false, data)
-		if err != nil {
-			log.Info(err)
-			return
-		}
-	}, qos, subscriber)
+	m, err := tool.TopicResolver(model.SouthboundUpTpl, topic)
+	if err != nil {
+		log.Info(err)
+		return
+	}
+	var device = m[model.TopicKeyDevice]
+
+	err = json.Unmarshal(payload, &msg)
+	if err != nil {
+		log.Debug(errors.Wrap(err, "message format must be json"))
+		return
+	}
+	log.Debug("msg:%s", string(payload))
+	if msg.Data == nil {
+		msg.Data = make(map[string]any)
+	}
+	err = updateRouter(device, msg.Gateway, msg.Channel)
+	if err != nil {
+		log.Info(errors.Wrap(err, "can't update device router"))
+		return
+	}
+	log.Debug("update device router:%s|%s|%s", device, msg.Gateway, msg.Channel)
+	var northUp = model.NorthboundUpStream{
+		Device: msg.Device,
+		Data:   msg.Data,
+	}
+	if len(msg.Gateway) > 0 {
+		northUp.Gateway.Gateway = msg.Gateway
+	}
+	if msg.Latitude != 0 {
+		northUp.Geo.Latitude = msg.Latitude
+		northUp.Geo.Longitude = msg.Longitude
+	}
+	topicExternal := fmt.Sprintf(model.NorthboundUpFormat, msg.Device)
+	var data []byte
+	data, err = json.Marshal(northUp)
+	if err != nil {
+		log.Info(err)
+		return
+	}
+	err = app.GetMqtt().Publish(topicExternal, qos, false, data)
+	if err != nil {
+		log.Info(err)
+		return
+	}
 }

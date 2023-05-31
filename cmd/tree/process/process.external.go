@@ -16,12 +16,15 @@ func external() {
 	qos := byte(conf.Config.Mqtt.Qos)
 	subscriber := model.NorthboundDownTopic
 	log.Info("subscriber:%s[%b]", subscriber, qos)
-	_ = app.GetMqtt().Subscribe(func(topic string, payload []byte) {
-		northboundDown(topic, payload)
-	}, qos, subscriber)
+	_ = app.GetMqtt().Subscribe(northboundDown, qos, subscriber)
 }
 
 func northboundDown(topic string, payload []byte) {
+	defer func() {
+		if e := recover(); e != nil {
+			log.Debug(e)
+		}
+	}()
 	m, err := tool.TopicResolver(model.NorthboundDownTpl, topic)
 	if err != nil {
 		log.Info(err)
