@@ -22,6 +22,7 @@ func main() {
 			fmt.Println(err)
 		}
 	}()
+	log.SetLevelAll(log.DEBUG)
 
 	err := _main()
 	if err != nil {

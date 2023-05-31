@@ -22,8 +22,9 @@ type DownStream struct {
 }
 
 type NorthboundUpStream struct {
-	Device string                 `json:"device,omitempty"`
-	Data   map[string]interface{} `json:"data,omitempty"`
+	Device  string                 `json:"device,omitempty"`
+	Gateway string                 `json:"gateway,omitempty"`
+	Data    map[string]interface{} `json:"data,omitempty"`
 }
 
 type NorthboundDownStream struct {
