@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/lishimeng/app-starter"
 	"github.com/lishimeng/go-log"
-	"github.com/lishimeng/tree/internal/etc"
+	"github.com/lishimeng/tree/internal/conf"
 	"github.com/lishimeng/tree/internal/model"
 	"github.com/lishimeng/tree/internal/tool"
 )
@@ -13,7 +13,7 @@ import (
 // down_stream
 // 接收北向命令, 发送到南向down_stream
 func external() {
-	qos := byte(etc.Config.Mqtt.Qos)
+	qos := byte(conf.Config.Mqtt.Qos)
 	subscriber := model.NorthboundDownTopic
 	log.Info("subscriber:%s[%b]", subscriber, qos)
 	_ = app.GetMqtt().Subscribe(func(topic string, payload []byte) {
@@ -41,7 +41,7 @@ func northboundDown(topic string, payload []byte) {
 // internalTx 下发数据到设备
 func internalTx(device string, payload model.NorthboundDownStream) {
 
-	qos := byte(etc.Config.Mqtt.Qos)
+	qos := byte(conf.Config.Mqtt.Qos)
 	// find router
 	// transform link message
 	// send data

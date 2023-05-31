@@ -1,4 +1,4 @@
-package etc
+package conf
 
 type Configuration struct {
 	Db    db

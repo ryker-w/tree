@@ -6,7 +6,7 @@ import (
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"github.com/lishimeng/app-starter"
 	"github.com/lishimeng/go-log"
-	"github.com/lishimeng/tree/internal/etc"
+	"github.com/lishimeng/tree/internal/conf"
 )
 
 type Tx struct {
@@ -38,6 +38,6 @@ func Command(payload Tx) (err error) {
 	if err != nil {
 		return
 	}
-	err = app.GetMqtt().Publish(to, byte(etc.Config.Mqtt.Qos), false, data)
+	err = app.GetMqtt().Publish(to, byte(conf.Config.Mqtt.Qos), false, data)
 	return
 }

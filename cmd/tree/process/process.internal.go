@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/lishimeng/app-starter"
 	"github.com/lishimeng/go-log"
-	"github.com/lishimeng/tree/internal/etc"
+	"github.com/lishimeng/tree/internal/conf"
 	"github.com/lishimeng/tree/internal/model"
 	"github.com/lishimeng/tree/internal/tool"
 )
@@ -13,7 +13,7 @@ import (
 // up_stream
 // 接收南向up消息,发送到北向
 func internal() {
-	qos := byte(etc.Config.Mqtt.Qos)
+	qos := byte(conf.Config.Mqtt.Qos)
 	subscriber := model.SouthboundUpTopic
 	log.Info("subscriber:%s[%b]", subscriber, qos)
 	_ = app.GetMqtt().Subscribe(func(topic string, payload []byte) {

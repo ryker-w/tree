@@ -4,14 +4,14 @@ import (
 	"context"
 	"fmt"
 	"github.com/lishimeng/app-starter"
-	etc2 "github.com/lishimeng/app-starter/etc"
+	"github.com/lishimeng/app-starter/etc"
 	"github.com/lishimeng/app-starter/mqtt"
 	"github.com/lishimeng/go-log"
 	persistence "github.com/lishimeng/go-orm"
 	"github.com/lishimeng/tree/cmd/tree/process"
 	"github.com/lishimeng/tree/internal/api"
+	"github.com/lishimeng/tree/internal/conf"
 	"github.com/lishimeng/tree/internal/db/model"
-	"github.com/lishimeng/tree/internal/etc"
 	"time"
 )
 import _ "github.com/lib/pq"
@@ -27,7 +27,7 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	time.Sleep(time.Second * 2)
+	time.Sleep(time.Millisecond * 500)
 }
 
 func _main() (err error) {
@@ -38,37 +38,37 @@ func _main() (err error) {
 	err = application.Start(func(ctx context.Context, builder *app.ApplicationBuilder) error {
 
 		var err error
-		err = builder.LoadConfig(&etc.Config, func(loader etc2.Loader) {
+		err = builder.LoadConfig(&conf.Config, func(loader etc.Loader) {
 			loader.SetFileSearcher(configName, ".").SetEnvPrefix("").SetEnvSearcher()
 		})
 		if err != nil {
 			return err
 		}
-		if len(etc.Config.Web.Listen) == 0 {
-			etc.Config.Web.Listen = ":80"
+		if len(conf.Config.Web.Listen) == 0 {
+			conf.Config.Web.Listen = ":80"
 		}
 		dbConfig := persistence.PostgresConfig{
-			UserName:  etc.Config.Db.User,
-			Password:  etc.Config.Db.Password,
-			Host:      etc.Config.Db.Host,
-			Port:      etc.Config.Db.Port,
-			DbName:    etc.Config.Db.Database,
+			UserName:  conf.Config.Db.User,
+			Password:  conf.Config.Db.Password,
+			Host:      conf.Config.Db.Host,
+			Port:      conf.Config.Db.Port,
+			DbName:    conf.Config.Db.Database,
 			InitDb:    true,
 			AliasName: "default",
-			SSL:       etc.Config.Db.Ssl,
+			SSL:       conf.Config.Db.Ssl,
 		}
 
-		cfgMqtt := etc.Config.Mqtt
+		cfgMqtt := conf.Config.Mqtt
 		builder.
 			EnableDatabase(dbConfig.Build(),
 				model.Tables()...).
-			SetWebLogLevel("debug").
+			//SetWebLogLevel("debug").
 			EnableMqtt(mqtt.WithAuth(cfgMqtt.Username, cfgMqtt.Password),
 				mqtt.WithBroker(cfgMqtt.Broker),
 				mqtt.WithRandomClientId(),
 				mqtt.WithOnConnectHandler(process.AfterConnect),
 				mqtt.WithOnLostHandler(process.OnLostConnection)).
-			EnableWeb(etc.Config.Web.Listen, api.Route).
+			EnableWeb(conf.Config.Web.Listen, api.Route).
 			PrintVersion()
 		return err
 	}, func(s string) {
