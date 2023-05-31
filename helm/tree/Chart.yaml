@@ -1,6 +1,6 @@
 apiVersion: v2
 name: tree
-description: A Helm chart for Kubernetes
+description: IoT server, mqtt, support gateway and sub device.
 
 # A chart can be either an 'application' or a 'library' chart.
 #
