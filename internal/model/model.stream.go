@@ -54,30 +54,18 @@ const (
 )
 
 var (
-	SouthboundDownTpl   string
-	SouthboundUpTpl     string
-	SouthboundDownTopic string
-	SouthboundUpTopic   string
+	SouthboundUpTpl   string
+	SouthboundUpTopic string
 
 	NorthboundDownTpl   string
-	NorthboundUpTpl     string
 	NorthboundDownTopic string
-	NorthboundUpTopic   string
 )
 
 func init() {
-	SouthboundDownTpl = tool.TopicBuilder(tool.BuilderOption{
-		Share: false,
-		Tpl:   true,
-	}, SouthboundDownFormat, TopicKeyDevice)
 	SouthboundUpTpl = tool.TopicBuilder(tool.BuilderOption{
 		Share: false,
 		Tpl:   true,
 	}, SouthboundUpFormat, TopicKeyDevice)
-	SouthboundDownTopic = tool.TopicBuilder(tool.BuilderOption{
-		Share: false,
-		Tpl:   false,
-	}, SouthboundDownFormat, "+")
 	SouthboundUpTopic = tool.TopicBuilder(tool.BuilderOption{
 		Share: true,
 		Tpl:   false,
@@ -87,16 +75,8 @@ func init() {
 		Share: false,
 		Tpl:   true,
 	}, NorthboundDownFormat, TopicKeyDevice)
-	NorthboundUpTpl = tool.TopicBuilder(tool.BuilderOption{
-		Share: false,
-		Tpl:   true,
-	}, NorthboundUpFormat, TopicKeyDevice)
 	NorthboundDownTopic = tool.TopicBuilder(tool.BuilderOption{
 		Share: true,
 		Tpl:   false,
 	}, NorthboundDownFormat, "+")
-	NorthboundUpTopic = tool.TopicBuilder(tool.BuilderOption{
-		Share: false,
-		Tpl:   false,
-	}, NorthboundUpFormat, "+")
 }
