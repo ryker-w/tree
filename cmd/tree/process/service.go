@@ -38,7 +38,6 @@ func updateRouter(device, gateway, channel string) (err error) {
 				return e
 			}
 		}
-
 		return nil
 	})
 	return

@@ -1,7 +1,6 @@
 package model
 
 import (
-	"fmt"
 	"github.com/lishimeng/tree/internal/tool"
 )
 
@@ -67,13 +66,37 @@ var (
 )
 
 func init() {
-	SouthboundDownTpl = tool.TopicBuilder(SouthboundDownFormat, TopicKeyDevice)
-	SouthboundUpTpl = tool.TopicBuilder(SouthboundUpFormat, TopicKeyDevice)
-	SouthboundDownTopic = fmt.Sprintf(SouthboundDownFormat, "+")
-	SouthboundUpTopic = fmt.Sprintf(SouthboundUpFormat, "+")
+	SouthboundDownTpl = tool.TopicBuilder(tool.BuilderOption{
+		Share: false,
+		Tpl:   true,
+	}, SouthboundDownFormat, TopicKeyDevice)
+	SouthboundUpTpl = tool.TopicBuilder(tool.BuilderOption{
+		Share: false,
+		Tpl:   true,
+	}, SouthboundUpFormat, TopicKeyDevice)
+	SouthboundDownTopic = tool.TopicBuilder(tool.BuilderOption{
+		Share: false,
+		Tpl:   false,
+	}, SouthboundDownFormat, "+")
+	SouthboundUpTopic = tool.TopicBuilder(tool.BuilderOption{
+		Share: true,
+		Tpl:   false,
+	}, SouthboundUpFormat, "+")
 
-	NorthboundDownTpl = tool.TopicBuilder(NorthboundDownFormat, TopicKeyDevice)
-	NorthboundUpTpl = tool.TopicBuilder(NorthboundUpFormat, TopicKeyDevice)
-	NorthboundDownTopic = fmt.Sprintf(NorthboundDownFormat, "+")
-	NorthboundUpTopic = fmt.Sprintf(NorthboundUpFormat, "+")
+	NorthboundDownTpl = tool.TopicBuilder(tool.BuilderOption{
+		Share: false,
+		Tpl:   true,
+	}, NorthboundDownFormat, TopicKeyDevice)
+	NorthboundUpTpl = tool.TopicBuilder(tool.BuilderOption{
+		Share: false,
+		Tpl:   true,
+	}, NorthboundUpFormat, TopicKeyDevice)
+	NorthboundDownTopic = tool.TopicBuilder(tool.BuilderOption{
+		Share: true,
+		Tpl:   false,
+	}, NorthboundDownFormat, "+")
+	NorthboundUpTopic = tool.TopicBuilder(tool.BuilderOption{
+		Share: false,
+		Tpl:   false,
+	}, NorthboundUpFormat, "+")
 }

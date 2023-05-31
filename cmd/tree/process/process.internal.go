@@ -73,6 +73,7 @@ func onSouthboundUp(topic string, payload []byte) {
 		log.Info(err)
 		return
 	}
+	log.Debug("upload to external:%s", string(data))
 	err = app.GetMqtt().Publish(topicExternal, qos, false, data)
 	if err != nil {
 		log.Info(err)
