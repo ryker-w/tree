@@ -7,10 +7,12 @@ import (
 
 // UpStream 设备上报
 type UpStream struct {
-	Device  string                 `json:"device,omitempty"`
-	Gateway string                 `json:"gateway,omitempty"`
-	Channel string                 `json:"channel,omitempty"`
-	Data    map[string]interface{} `json:"data,omitempty"`
+	Device    string                 `json:"device,omitempty"`
+	Gateway   string                 `json:"gateway,omitempty"`
+	Latitude  float64                `json:"latitude,omitempty"`
+	Longitude float64                `json:"longitude,omitempty"`
+	Channel   string                 `json:"channel,omitempty"`
+	Data      map[string]interface{} `json:"data,omitempty"`
 }
 
 // DownStream 下发
@@ -23,8 +25,18 @@ type DownStream struct {
 
 type NorthboundUpStream struct {
 	Device  string                 `json:"device,omitempty"`
-	Gateway string                 `json:"gateway,omitempty"`
+	Gateway GatewayInfo            `json:"gateway,omitempty"`
+	Geo     GeoInfo                `json:"geo,omitempty"`
 	Data    map[string]interface{} `json:"data,omitempty"`
+}
+
+type GatewayInfo struct {
+	Gateway string `json:"gateway,omitempty"`
+}
+
+type GeoInfo struct {
+	Latitude  float64 `json:"latitude,omitempty"`  // 纬度
+	Longitude float64 `json:"longitude,omitempty"` // 经度
 }
 
 type NorthboundDownStream struct {
