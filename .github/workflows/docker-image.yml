@@ -14,10 +14,7 @@ jobs:
     - uses: actions/checkout@v3
     - name: Build the Docker image
       run: |
-        pwd
-        ls -la
-        cat build.sh
-        ./biuld.sh
+        ./build.sh
     - name: Push
       run: |
         docker version
