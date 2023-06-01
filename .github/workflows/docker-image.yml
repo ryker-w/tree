@@ -15,4 +15,7 @@ jobs:
     - name: Build the Docker image
       run: ./biuld.sh
     - name: Push
-      run: docker images
+      run: |
+        docker version
+        docker login --username=${{ secrets.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD }}
+        ./build.sh push
