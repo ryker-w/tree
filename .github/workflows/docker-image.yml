@@ -15,6 +15,7 @@ jobs:
     - name: Build the Docker image
       run: |
         pwd
+        ls -la
         ./biuld.sh
     - name: Push
       run: |
