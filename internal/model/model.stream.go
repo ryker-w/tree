@@ -8,8 +8,8 @@ import (
 type UpStream struct {
 	Device    string                 `json:"device,omitempty"`
 	Gateway   string                 `json:"gateway,omitempty"`
-	Latitude  float64                `json:"latitude,omitempty"`
-	Longitude float64                `json:"longitude,omitempty"`
+	Latitude  any                    `json:"latitude,omitempty"`
+	Longitude any                    `json:"longitude,omitempty"`
 	Channel   string                 `json:"channel,omitempty"`
 	Data      map[string]interface{} `json:"data,omitempty"`
 }

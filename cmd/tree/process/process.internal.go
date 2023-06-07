@@ -59,12 +59,14 @@ func onSouthboundUp(topic string, payload []byte) {
 		Device: msg.Device,
 		Data:   msg.Data,
 	}
+
 	if len(msg.Gateway) > 0 {
 		northUp.Gateway.Gateway = msg.Gateway
 	}
-	if msg.Latitude != 0 {
-		northUp.Geo.Latitude = msg.Latitude
-		northUp.Geo.Longitude = msg.Longitude
+	latitude, longitude := handleGeo(msg)
+	if latitude != 0 && longitude != 0 {
+		northUp.Geo.Latitude = latitude
+		northUp.Geo.Longitude = longitude
 	}
 	topicExternal := fmt.Sprintf(model.NorthboundUpFormat, msg.Device)
 	var data []byte
@@ -79,4 +81,10 @@ func onSouthboundUp(topic string, payload []byte) {
 		log.Info(err)
 		return
 	}
+}
+
+func handleGeo(src model.UpStream) (latitude float64, longitude float64) {
+	latitude = tool.ConvertGeo(src.Latitude)
+	longitude = tool.ConvertGeo(src.Longitude)
+	return
 }

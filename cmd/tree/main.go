@@ -28,7 +28,7 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	time.Sleep(time.Millisecond * 500)
+	time.Sleep(time.Millisecond * 200)
 }
 
 func _main() (err error) {
@@ -63,7 +63,7 @@ func _main() (err error) {
 		builder.
 			EnableDatabase(dbConfig.Build(),
 				model.Tables()...).
-			//SetWebLogLevel("debug").
+			SetWebLogLevel("debug").
 			EnableMqtt(mqtt.WithAuth(cfgMqtt.Username, cfgMqtt.Password),
 				mqtt.WithBroker(cfgMqtt.Broker),
 				mqtt.WithRandomClientId(),
