@@ -49,6 +49,13 @@ func onSouthboundUp(topic string, payload []byte) {
 	if msg.Data == nil {
 		msg.Data = make(map[string]any)
 	}
+	if len(msg.ExtSim) > 0 {
+		err = updateGatewayExt(msg.Gateway, msg.ExtSim)
+		if err != nil {
+			log.Info(errors.Wrapf(err, "can't update gateway extension information. %s[%s]", msg.Gateway, msg.ExtSim))
+			return
+		}
+	}
 	err = updateRouter(device, msg.Gateway, msg.Channel)
 	if err != nil {
 		log.Info(errors.Wrap(err, "can't update device router"))
