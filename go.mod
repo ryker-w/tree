@@ -6,7 +6,7 @@ require (
 	github.com/eclipse/paho.mqtt.golang v1.4.2
 	github.com/kataras/iris/v12 v12.2.0
 	github.com/lib/pq v1.10.5
-	github.com/lishimeng/app-starter v1.11.0
+	github.com/lishimeng/app-starter v1.11.20
 	github.com/lishimeng/geo v1.0.2
 	github.com/lishimeng/go-log v1.0.0
 	github.com/lishimeng/go-orm v1.2.2
@@ -64,7 +64,7 @@ require (
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/spf13/viper v1.10.1 // indirect
-	github.com/streadway/amqp v1.0.0 // indirect
+	github.com/streadway/amqp v1.1.0 // indirect
 	github.com/subosito/gotenv v1.2.0 // indirect
 	github.com/tdewolff/minify/v2 v2.12.4 // indirect
 	github.com/tdewolff/parse/v2 v2.6.4 // indirect
