@@ -7,6 +7,38 @@ import (
 	"github.com/lishimeng/tree/internal/db/model"
 )
 
+func updateGatewayExt(gateway string, sim string) (err error) {
+	err = app.GetOrm().Transaction(func(context persistence.TxContext) error {
+
+		var extensionInfos []model.GatewayExt
+		_, e := context.Context.QueryTable(new(model.GatewayExt)).
+			Filter("GatewayCode", gateway).
+			All(&extensionInfos)
+		if e != nil {
+			return e
+		}
+		var ext model.GatewayExt
+		if len(extensionInfos) > 0 {
+			ext = extensionInfos[0]
+			ext.Sim = sim
+			_, e = context.Context.Update(&ext, "Sim")
+			if e != nil {
+				return e
+			}
+		} else {
+			ext.Sim = sim
+			ext.GatewayCode = gateway
+			ext.Status = 1
+			_, e = context.Context.Insert(&ext)
+			if e != nil {
+				return e
+			}
+		}
+		return nil
+	})
+	return
+}
+
 // updateRouter 更新router
 func updateRouter(device, gateway, channel string) (err error) {
 

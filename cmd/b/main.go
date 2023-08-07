@@ -6,9 +6,14 @@ import (
 )
 
 func main() {
-	err := buildscript.Generate("tree",
+	err := buildscript.Generate(
 		"lishimeng",
-		"cmd/tree/main.go", false)
+		buildscript.Application{
+			Name:    "tree",
+			AppPath: "cmd/tree",
+			HasUI:   false,
+		},
+	)
 	if err != nil {
 		fmt.Println(err)
 	} else {
